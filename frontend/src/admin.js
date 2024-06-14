@@ -220,7 +220,7 @@ const renderNew = () => {
             <h1>Admin</h1>
             <p>TODO - Instructions</p>
             <h2>Create New Event</h2>
-            <div class="card text-bg-light">
+            <div class="card text-bg-light mb-3">
                 <div class="card-body">
                     <form class="new-event">
                         <div class="row">
