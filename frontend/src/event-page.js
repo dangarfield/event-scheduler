@@ -12,7 +12,7 @@ const getEvent = async (eventID, attendeeID) => {
 }
 const renderDateSlots = (event) => {
     document.querySelector('.date-slots').innerHTML = `${event.dates.map(date => {
-        return `<div class="card mb-3">
+        return `<div class="card text-bg-light mb-3">
             <div class="card-body row">
                 <div class="col">
                     <p class="mb-0">${new Date(date.date).toDateString()}</p>
@@ -29,9 +29,8 @@ const renderDateSlots = (event) => {
             </div>
         </div>`
     }).join('')}
-    <div class="card">
+    <div class="card text-bg-light">
         <div class="card-body row">
-            
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary w-100">Save date</button>
             </div>
@@ -47,7 +46,7 @@ const renderEvent = (event) => {
                 ${event.intro.split('\n').map(text => `<p>${text}</p>`).join('')}
 
                 <form class="event mb-3">
-                    <div class="card mb-3">
+                    <div class="card text-bg-light mb-3">
                         <div class="card-body row">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
