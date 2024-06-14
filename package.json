@@ -1,0 +1,42 @@
+{
+  "name": "date-selection-picker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:functions": "netlify dev",
+    "dev:frontend": "npm run dev -w frontend",
+    "build:frontend": "npm run build -w frontend",
+    "deploy": "netlify deploy --prod"
+  },
+  "author": "Dan Garfield",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "netlify-cli": "^17.26.3",
+    "npm-run-all": "^4.1.5",
+    "standard": "^17.1.0"
+  },
+  "dependencies": {
+    "mongodb": "^6.7.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "_data/*",
+      "frontend/*",
+      "backend/*"
+    ]
+  },
+  "standard": {
+    "ignore": [
+      ".env",
+      ".env.local",
+      ".env.local.example"
+    ]
+  }
+}
