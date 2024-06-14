@@ -14,36 +14,51 @@ const exportToSpreadsheet = (data, fileName) => {
     const fileData = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" })
     FileSaver.saveAs(fileData, fileName)
 }
-
+const renderAttendeeLinks = (eventID, eventEle) => {
+    const attendees = eventEle.querySelector('#attendees').value.split('\n').map(a => {return {name:a,link:btoa(a)}})
+    console.log('attendees', attendees)
+    eventEle.querySelector('.attendee-links').innerHTML = attendees.map(a => {
+        return `<p class="mb-0"><a href="/${eventID}/${a.link}" target="_blank">Link for ${a.name}</a></p>`
+    }).join('')
+}
 const renderEvents = () => {
     console.log('renderEvents', allEvents, document.querySelector('.existing-holder'))
     document.querySelector('.existing-holder').innerHTML = allEvents.map(event => {
 
-
         return `<form class="mb-3 data-event" data-event="${event.id}">
         <div class="row">
-            <div class="col-2">
+            <div class="col">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="event" value="${event.id}">
                     <label for="event">Event ID</label>
                 </div>
+            </div>
+            <div class="col">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="name" value="${event.name}">
                     <label for="name">Event Name</label>
                 </div>
-
+            </div>
+            <div class="col">
                 <div class="form-floating mb-3">
                     <textarea class="form-control" placeholder="Introduction Text" id="intro" style="height:200px">${event.intro}</textarea>
                     <label for="intro">Introduction Text</label>
                 </div>
-
+            </div>
+            <div class="col">
                 <div class="form-floating mb-3">
-                    <textarea class="form-control" placeholder="School List" id="attendees" style="height:400px">${event.attendees.join('\n')}</textarea>
+                    <textarea class="form-control" placeholder="School List" id="attendees" style="height:200px">${event.attendees.join('\n')}</textarea>
                     <label for="attendees">School List</label>
                 </div>
-
-
             </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <h5>Attendee Links</h5>
+                    <div class="attendee-links"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-auto">
                 
                 ${event.dates.map(date => {
@@ -70,6 +85,18 @@ const renderEvents = () => {
                                                 <div class="form-floating">
                                                     <input type="email" class="form-control form-control-sm email" value="${slot.email}" style="min-width:250px">
                                                     <label>Email</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control form-control-sm size" value="${slot.size}" style="max-width:100px">
+                                                    <label>Class Size</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-floating">
+                                                    <textarea class="form-control form-control-sm notes" style="height: 50px;min-width:250px">${slot.notes || ''}</textarea>
+                                                    <label>Notes</label>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
@@ -162,6 +189,7 @@ const renderEvents = () => {
                 window.location.reload()
             }
         })
+        renderAttendeeLinks(eventID, eventEle)
     })
 }
 
