@@ -242,7 +242,7 @@ const renderNew = () => {
             <ul>
                 <li>Notifications for you or the attendees</li>
             </ul>
-            
+
             <h2>Create New Event</h2>
             <div class="card text-bg-light mb-3">
                 <div class="card-body">
@@ -265,7 +265,7 @@ const renderNew = () => {
                             <div class="col-6">
                             
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro" style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe SafeSpace Team</textarea>
+                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro" style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe Phase Team</textarea>
                                     <label for="new-intro">Introduction Text</label>
                                 </div>
                                 <div class="row mb-3">
