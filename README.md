@@ -5,4 +5,4 @@ TODO
 - DONE - Ensure admin update saves size and notes
 - DONE - Tweak styling and colouring
 - DONE - Add instructions and a little more detail
-- Add loading icon
+- DONE - Add loading icon

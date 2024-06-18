@@ -217,7 +217,7 @@ const renderNew = () => {
     document.querySelector('.content').innerHTML = `
     <div class='row'>
         <div class="col-12">
-            <h1>Admin</h1>
+            <h1>Attendee Scheduler Admin</h1>
             <p class="lead">This site allows you to configure an event, send links to your attendees, allowing them to choose a selection, the you can export to Excel</p>
             
             <div class="accordion instructions mb-3">
