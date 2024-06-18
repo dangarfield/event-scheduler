@@ -220,28 +220,43 @@ const renderNew = () => {
             <h1>Admin</h1>
             <p class="lead">This site allows you to configure an event, send links to your attendees, allowing them to choose a selection, the you can export to Excel</p>
             
-            <h3>Instructions</h3>
-            <p>Configuring:</p>
-            <ul>
-                <li>Event name - This is shown on the attendee page, a version of it also makes up the URL</li>
-                <li>School list - Add as many as you want here, schools will not see each other's names, slots or email addresses etc</li>
-                <li>Introduction text - This is show on the attendee page</li>
-                <li>From / to date - This is just a date range of the event. You can disable certain days and slots after it is created</li>
-                <li>Available days / slots - Working work / every. Full day / Morning afternoon. You can rename the slots after created, eg, 9-11am etc</li>
-                <li>Once the event has been created, you can view the results, links and edit information on this page below</li>
-            </ul>
-            <p>Running</p>
-            <ul>
-                <li>Editing event - You can change all aspects of the event. Eg, name, text, schools etc. You can also view the information that has been added for each slot</li>
-                <li>Overriding - Edit the text in the 'All events' table for the event you want and press 'update event'</li>
-                <li>Send links to schools - As you update the schools list, you can copy the links for each school. They can re-edit their selection</li>
-                <li>Save to excel - Click the button to save it</li>
-            </ul>
+            <div class="accordion instructions mb-3">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Instructions (click to expand)
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>Configuring:</p>
+                            <ul>
+                                <li>Event name - This is shown on the attendee page, a version of it also makes up the URL</li>
+                                <li>School list - Add as many as you want here, schools will not see each other's names, slots or email addresses etc</li>
+                                <li>Introduction text - This is show on the attendee page</li>
+                                <li>From / to date - This is just a date range of the event. You can disable certain days and slots after it is created</li>
+                                <li>Available days / slots - Working work / every. Full day / Morning afternoon. You can rename the slots after created, eg, 9-11am etc</li>
+                                <li>Once the event has been created, you can view the results, links and edit information on this page below</li>
+                            </ul>
+                            <p>Running</p>
+                            <ul>
+                                <li>Editing event - You can change all aspects of the event. Eg, name, text, schools etc. You can also view the information that has been added for each slot</li>
+                                <li>Overriding - Edit the text in the 'All events' table for the event you want and press 'update event'</li>
+                                <li>Send links to schools - As you update the schools list, you can copy the links for each school. They can re-edit their selection</li>
+                                <li>Save to excel - Click the button to save it</li>
+                            </ul>
 
-            <p>Not implemented</p>
-            <ul>
-                <li>Notifications for you or the attendees</li>
-            </ul>
+                            <p>Not implemented</p>
+                            <ul>
+                                <li>Notifications for you or the attendees</li>
+                            </ul>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Instructions</h3>
+            
 
             <h2>Create New Event</h2>
             <div class="card text-bg-light mb-3">
@@ -359,6 +374,12 @@ const bindNew = () => {
         allEvents.push(event)
         await saveEvent(event)
         renderEvents()
+    })
+
+    document.querySelector('.instructions .accordion-button').addEventListener('click', () => {
+        console.log('asdsad')
+        document.querySelector('.instructions .accordion-button').classList.toggle('collapsed')
+        document.querySelector('.instructions .accordion-collapse').classList.toggle('collapse')
     })
 }
 const saveEvent = async (event) => {
