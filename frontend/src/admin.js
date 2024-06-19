@@ -130,7 +130,7 @@ const renderEvents = () => {
                                     <th scope="col" style="width:8%">Slot</th>
                                     <th scope="col">Time</th>
                                     <th scope="col">School</th>
-                                    <th scope="col" style="width:5%">No. of Forms</th>
+                                    <th scope="col" style="width:5%">No. of Classes</th>
                                     <th scope="col" style="width:5%">Class Size</th>
                                     <th scope="col">Teacher Name</th>
                                     <th scope="col">Teacher Email</th>

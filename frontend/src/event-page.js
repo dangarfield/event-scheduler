@@ -56,6 +56,7 @@ const renderDateSlots = (event) => {
     </div>`
 }
 const renderEvent = (event) => {
+    document.title = event.name
     let email1 = ''
     let name1 = ''
     let email2 = ''
@@ -117,7 +118,7 @@ const renderEvent = (event) => {
                                                 <option value="2"${event.formSize === 2 ?' selected':''}>2</option>
                                                 <option value="3"${event.formSize === 3 ?' selected':''}>3</option>
                                             </select>
-                                            <label for="floatingSelect">No. of Forms</label>
+                                            <label for="floatingSelect">No. of Classes</label>
                                         </div>
                                     </div>
                                     <div class="col-7">
