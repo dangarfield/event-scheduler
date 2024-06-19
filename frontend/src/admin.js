@@ -60,17 +60,31 @@ const exportToSpreadsheet = (data, fileName) => {
     const fileData = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" })
     FileSaver.saveAs(fileData, fileName)
 }
+const isAttendeeComplete = (event, name) => {
+    console.log('isAttendeeComplete', event, name)
+    return true
+}
 const renderAttendeeLinks = (eventID, eventEle) => {
     const attendees = eventEle.querySelector('#attendees').value.split('\n').map(a => {return {name:a,link:btoa(a)}})
-    console.log('attendees', attendees)
+    const attendeesComplete = []
+    const event = getEventDataFromTable(eventEle)
+    for (const date of event.dates) {
+        for (const slot of date.slots) {
+            if (slot.school !== '' && !attendeesComplete.includes(slot.name)) attendeesComplete.push(slot.school)
+        }
+    }
+    console.log('attendees', attendees, attendeesComplete, event)
     eventEle.querySelector('.attendee-links').innerHTML = attendees.map(a => {
-        return `<p class="mb-0"><a href="/${eventID}/${a.link}" target="_blank">Link for ${a.name}</a></p>`
+        const complete = attendeesComplete.includes(a.name)
+        return `<p class="mb-0">
+            ${complete?'<i class="bi bi-patch-check-fill text-success me-1"></i>':'<i class="bi bi-patch-check-fill text-success me-1 opacity-0"></i>'}
+            <a href="/${eventID}/${a.link}" target="_blank">${a.name}</a>
+        </p>`
     }).join('')
 }
 const renderEvents = () => {
     console.log('renderEvents', allEvents, document.querySelector('.existing-holder'))
     document.querySelector('.existing-holder').innerHTML = allEvents.map(event => {
-
         return `
         <div class="card text-bg-light mb-3">
             <div class="card-body">
@@ -376,7 +390,8 @@ const renderNew = () => {
                                             <div class="col-6">
                                             
                                                 <div class="form-floating mb-3">
-                                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro" style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe Phase Team</textarea>
+                                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro"
+                                                        style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe Phase Team</textarea>
                                                     <label for="new-intro">Introduction Text</label>
                                                 </div>
                                                 <div class="row mb-3">
@@ -478,7 +493,7 @@ const bindNew = () => {
     })
 
     document.querySelectorAll('.accordion').forEach(accordion => {
-        accordion.addEventListener('click', () => {
+        accordion.querySelector('.accordion-button').addEventListener('click', () => {
             accordion.querySelector('.accordion-button').classList.toggle('collapsed')
             accordion.querySelector('.accordion-collapse').classList.toggle('collapse')
         })
