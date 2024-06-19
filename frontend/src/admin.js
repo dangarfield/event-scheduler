@@ -4,6 +4,52 @@ import Toastify from 'toastify-js'
 
 const allEvents = []
 
+const getEventDataFromTable = (eventEle) => {
+    const slots = Array.from(eventEle.querySelectorAll('.data-slot')).map(slotEle => {
+        const formSize = parseInt(slotEle.querySelector('.form-size').value)
+        
+        const teachers = []
+        const name1 = slotEle.querySelector('.name1').value
+        const email1 = slotEle.querySelector('.email1').value
+        const name2 = slotEle.querySelector('.name2').value
+        const email2 = slotEle.querySelector('.email2').value
+        const name3 = slotEle.querySelector('.name3').value
+        const email3 = slotEle.querySelector('.email3').value
+        if (name1 !== '' && email1 !== '') teachers.push({name:name1,email:email1})
+        if (formSize >= 2 && name2 !== '' && email2 !== '') teachers.push({name:name2,email:email2})
+        if (formSize >= 3 && name3 !== '' && email3 !== '') teachers.push({name:name3,email:email3})
+        
+        return {
+            date: new Date(slotEle.getAttribute('data-date')),
+            slot: slotEle.querySelector('.slot').value,
+            time: slotEle.querySelector('.time').value,
+            school: slotEle.querySelector('.school').value,
+            formSize,
+            classSize: parseInt(slotEle.querySelector('.class-size').value) || '',
+            teachers,
+            notes: slotEle.querySelector('.notes').value,
+            disabled: slotEle.querySelector('.form-check-input').checked
+        }
+    })
+    const dates = []
+    for (const slot of slots) {
+        if (!dates.some(e => e.date.getTime() === slot.date.getTime())) {
+            dates.push({date:slot.date,slots:[]})
+        }
+        const date = dates.find(e => e.date.getTime() === slot.date.getTime())
+        delete slot.date
+        date.slots.push(slot)
+    }
+
+    const event = {
+        id: eventEle.querySelector('#event').value,
+        name: eventEle.querySelector('#name').value,
+        intro: eventEle.querySelector('#intro').value,
+        attendees: eventEle.querySelector('#attendees').value.split('\n'),
+        dates
+    }
+    return event
+}
 const exportToSpreadsheet = (data, fileName) => {
     const workSheet = XLSX.utils.aoa_to_sheet(data)
     const workBook = {
@@ -62,63 +108,86 @@ const renderEvents = () => {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-auto">
-                        
-                        ${event.dates.map(date => {
-                            return `<div class="row mb-3 date-row" data-date="${date.date.toISOString()}">
-                                <div class="col">
-                                    ${date.date.toDateString()}
-                                </div>
-                                <div class="col-auto">
-                                    ${date.slots.map(slot => {
-                                        return `<div class="row mb-2 slot gx-2" data-date="${date.date.toDateString()}">
-                                                    <div class="col-auto">
-                                                        <div class="form-floating">
-                                                            <input type="text" class="form-control form-control-sm slot" value="${slot.slot}" style="width:100px">
-                                                            <label>Slot</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-floating">
-                                                            <input type="text" class="form-control form-control-sm attendee" value="${slot.attendee}" style="min-width:250px">
-                                                            <label>Attendee</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-floating">
-                                                            <input type="email" class="form-control form-control-sm email" value="${slot.email}" style="min-width:250px">
-                                                            <label>Email</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-floating">
-                                                            <input type="number" class="form-control form-control-sm size" value="${slot.size}" style="max-width:100px">
-                                                            <label>Class Size</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-floating">
-                                                            <textarea class="form-control form-control-sm notes" style="height: 50px;min-width:250px">${slot.notes || ''}</textarea>
-                                                            <label>Notes</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox" role="switch" id="${event.id}-${date.date.getTime()}-${slot.slot}-disable"${slot.disabled?' checked':''}>
-                                                            <label class="form-check-label" for="${event.id}-${date.date.getTime()}-${slot.slot}-disable">Disable slot</label>
-                                                        </div>
-                                                    </div>
-                                                </div>`
-                                    }).join('')}
-                                </div>
-                            </div>`
-                        }).join('')}
-
-                        <button type="button" class="btn btn-danger delete">Delete</button>
-                        <a class="btn btn-secondary" target="_blank" href="/${event.id}">Go to page</a>
-                        <button type="button" class="btn btn-secondary save-to-excel">Save to excel</button>
-                        <button type="submit" class="btn btn-primary">Update event</button>
+                    <div class="col">
+                        <table class="table table-striped table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col" style="width:8%">Slot</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">School</th>
+                                    <th scope="col" style="width:5%">Form Size</th>
+                                    <th scope="col" style="width:5%">Class Size</th>
+                                    <th scope="col">Teacher Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Notes</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${event.dates.map((date) => {
+                                return date.slots.map((slot,slotIndex) => {
+                                    let name1 = ''
+                                    let email1 = ''
+                                    let name2 = ''
+                                    let email2 = ''
+                                    let name3 = ''
+                                    let email3 = ''
+                                    if (slot.teachers.length > 0) {
+                                        name1 = slot.teachers[0].name
+                                        email1 = slot.teachers[0].email
+                                    }
+                                    if (slot.teachers.length > 1) {
+                                        name2 = slot.teachers[1].name
+                                        email2 = slot.teachers[1].email
+                                    }
+                                    if (slot.teachers.length > 2) {
+                                        name3 = slot.teachers[2].name
+                                        email3 = slot.teachers[2].email
+                                    }
+                                    if (!slot.formSize) slot.formSize = 1
+                                    console.log('formSize', slot.formSize)
+                                    return `<tr class="data-slot${slot.school!==''?' table-success':''}" data-date="${date.date.toISOString()}">
+                                        <th scope="row">${slotIndex === 0?date.date.toDateString():''}</th>
+                                        <td><input type="text" class="form-control form-control-sm w-100 slot" value="${slot.slot}"></td>
+                                        <td><input type="time" class="form-control form-control-sm w-100 time" value="${slot.time}"></td>
+                                        <td><input type="text" class="form-control form-control-sm w-100 school" value="${slot.school}"></td>
+                                        <td>
+                                            <select class="form-select form-select-sm form-size">
+                                                <option value="1"${slot.formSize === 1 ?' selected':''}>1</option>
+                                                <option value="2"${slot.formSize === 2 ?' selected':''}>2</option>
+                                                <option value="3"${slot.formSize === 3 ?' selected':''}>3</option>
+                                            </select>
+                                        </td>
+                                        <td><input type="number" class="form-control form-control-sm w-100 class-size" value="${slot.classSize}"></td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm w-100 name1" value="${name1}">
+                                            <input type="text" class="form-control form-control-sm w-100 name2" value="${name2}"${slot.formSize >= 2 ? '':'style="display:none"'}>
+                                            <input type="text" class="form-control form-control-sm w-100 name3" value="${name3}"${slot.formSize >= 3 ? '':'style="display:none"'}>
+                                        </td>
+                                        <td>
+                                            <input type="email" class="form-control form-control-sm w-100 email1" value="${email1}">
+                                            <input type="email" class="form-control form-control-sm w-100 email2" value="${email2}"${slot.formSize >= 2 ? '':'style="display:none"'}>
+                                            <input type="email" class="form-control form-control-sm w-100 email3" value="${email3}"${slot.formSize >= 3 ? '':'style="display:none"'}>
+                                        </td>
+                                        <td><textarea class="form-control form-control-sm w-100 notes" rows="1">${slot.notes}</textarea></td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="${event.id}-${date.date.getTime()}-${slot.slot}-disable"${slot.disabled?' checked':''}>
+                                                <label class="form-check-label" for="${event.id}-${date.date.getTime()}-${slot.slot}-disable">Disable slot</label>
+                                            </div>
+                                        </td>
+                                    </tr>`
+                                }).join('')
+                            }).join('')}
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+                <div class="text-end">
+                    <button type="button" class="btn btn-danger delete">Delete</button>
+                    <button type="button" class="btn btn-secondary save-to-excel">Save to excel</button>
+                    <button type="submit" class="btn btn-primary">Update event</button>
                 </div>
             </form>
         </div>
@@ -134,27 +203,7 @@ const renderEvents = () => {
         console.log('BIND eventID', eventID)
         eventEle.addEventListener('submit', (e) => {
             e.preventDefault()
-            const event = {
-                id: eventEle.querySelector('#event').value,
-                name: eventEle.querySelector('#name').value,
-                intro: eventEle.querySelector('#intro').value,
-                attendees: eventEle.querySelector('#attendees').value.split('\n'),
-                dates: Array.from(eventEle.querySelectorAll('.date-row')).map(dateEle => {
-                    return {
-                        date: new Date(dateEle.getAttribute('data-date')),
-                        slots: Array.from(dateEle.querySelectorAll('.row.slot')).map(slotEle => {
-                            return {
-                                slot: slotEle.querySelector('.slot').value,
-                                attendee: slotEle.querySelector('.attendee').value,
-                                email: slotEle.querySelector('.email').value,
-                                size: slotEle.querySelector('.size').value,
-                                notes: slotEle.querySelector('.notes').value,
-                                disabled: slotEle.querySelector('.form-check-input').checked
-                            }
-                        })
-                    }
-                })
-            }
+            const event = getEventDataFromTable(eventEle)
             saveEvent(event)
             
             console.log('UPDATE event', event)
@@ -162,24 +211,37 @@ const renderEvents = () => {
         eventEle.querySelector('.save-to-excel').addEventListener('click', () => {
             console.log('save to excel', eventID)
             const excelData = [
-                ['Date','Slot','Attendee','Email','Class Size','Notes','Disabled']
+                ['Date','Slot','Time','School','Form Size','Class Size','Teacher Name','Teacher Email','Notes','Disabled']
             ]
-            const slotEles = Array.from(eventEle.querySelectorAll('.row.slot')).map(slotEle => {
-                return [
-                    slotEle.getAttribute('data-date'),
-                    slotEle.querySelector('.slot').value,
-                    slotEle.querySelector('.attendee').value,
-                    slotEle.querySelector('.email').value,
-                    slotEle.querySelector('.size').value,
-                    slotEle.querySelector('.notes').value,
-                    slotEle.querySelector('.form-check-input').checked ? 'Disabled' : ''
-                ]
-            })
-            excelData.push(...slotEles)
+            const event = getEventDataFromTable(eventEle)
+            for (const date of event.dates) {
+                for (let [slotIndex, slot] of date.slots.entries()) {
+                    const name = slot.teachers.length>0? slot.teachers[0].name:''
+                    const email = slot.teachers.length>0? slot.teachers[0].email:''
+                    const line = [
+                        slotIndex===0?date.date.toDateString():'', // Only show on first slot
+                        slot.slot,
+                        slot.time,
+                        slot.school,
+                        slot.formSize,
+                        slot.classSize,
+                        name,
+                        email,
+                        slot.notes,
+                        slot.disabled?'Disabled':''
+                    ]
+                    excelData.push(line)
+                    if (slot.teachers.length>=2) {
+                        excelData.push(['','','','','','',slot.teachers[1].name,slot.teachers[1].email,'',''])
+                    }
+                    if (slot.teachers.length>=3) {
+                        excelData.push(['','','','','','',slot.teachers[2].name,slot.teachers[2].email,'',''])
+                    }
+                }
+            }
 
-            console.log('excelData',excelData, slotEles)
+            console.log('excelData',event, excelData)
             exportToSpreadsheet(excelData,`${eventID}.xlsx`)
-            
         })
         eventEle.querySelector('.delete').addEventListener('click', async () => {
             const confirmed = confirm('Are you sure?')
@@ -202,6 +264,36 @@ const renderEvents = () => {
         eventEle.querySelector('#attendees').addEventListener('change', () => {
             console.log('attendees change')
             renderAttendeeLinks(eventID, eventEle)
+        })
+        eventEle.querySelectorAll('.form-size').forEach((formSizeEle) => {
+            formSizeEle.addEventListener('change', (eformSizeEleChange) => {
+                const formSize = parseInt(eformSizeEleChange.target.value)
+                switch (formSize) {
+                    case 1:
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name2').style.display = 'none'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email2').style.display = 'none'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name3').style.display = 'none'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email3').style.display = 'none'
+                        break;
+                    case 2:
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name2').style.display = 'block'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email2').style.display = 'block'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name3').style.display = 'none'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email3').style.display = 'none'
+                        break;
+                    case 3:
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name2').style.display = 'block'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email2').style.display = 'block'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.name3').style.display = 'block'
+                        eformSizeEleChange.target.parentNode.parentNode.querySelector('.email3').style.display = 'block'
+                        break;
+                
+                    default:
+                        break;
+                }
+                // eformSizeEleChange.target.parentNode.parentNode.querySelector('.name2')
+                console.log(';asdsad')
+            })
         })
     })
 }
@@ -254,9 +346,6 @@ const renderNew = () => {
                     </div>
                 </div>
             </div>
-
-            <h3>Instructions</h3>
-            
 
             <h2>Create New Event</h2>
             <div class="card text-bg-light mb-3">
@@ -340,16 +429,17 @@ const bindNew = () => {
             }
             currentDate.setDate(currentDate.getDate() + 1)
         }
+        console.log('dateList', dateList)
         return dateList
     }
     const addSlots = (dates, slotType) => {
         return dates.map(date => {
             const slots = []
-            if(slotType === 'morningafternoon') {
-                slots.push({slot: 'Morning', attendee:'', email:''})
-                slots.push({slot: 'Afternoon', attendee:'', email:''})
+            if (slotType === 'morningafternoon') {
+                slots.push({slot: 'Morning', time:'', school:'', formSize:'', classSize:'', teachers:[], notes:''})
+                slots.push({slot: 'Afternoon', time:'', school:'', formSize:'', classSize:'', teachers:[], notes:''})
             } else {
-                slots.push({slot: 'Day', attendee:'', email:''})
+                slots.push({slot: 'Day', time:'', school:'', formSize:'', classSize:'', teachers:[], notes:''})
             }
             return {date, slots}
         })
@@ -370,7 +460,6 @@ const bindNew = () => {
             attendees: document.querySelector('.new-event #new-attendees').value.split('\n')
         }
         console.log('event', event)
-        // TODO - Persist event
         allEvents.push(event)
         await saveEvent(event)
         renderEvents()

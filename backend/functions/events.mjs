@@ -63,24 +63,30 @@ export async function handler(req, context) {
         delete event._id
         delete event.attendees
 
-        event.attendee = attendeeID
-        event.email = ''
-        event.size = 10
+        event.school = attendeeID
+        event.time = ''
+        event.formSize = 1
+        event.classSize = 10
+        event.teachers = []
         event.notes = ''
         
         // clean up, eg remove emails
         for (const date of event.dates) {
           for (const slot of date.slots) {
             console.log('slot', slot)
-            if (slot.attendee !== attendeeID && slot.attendee !== '') {
-              slot.attendee = ''
-              slot.email = ''
-              slot.size = 10
+            if (slot.school !== attendeeID && slot.school !== '') {
+              slot.school = ''
+              slot.time = ''
+              slot.formSize = 1
+              slot.classSize = 10
+              slot.teachers = []
               slot.notes = ''
               slot.disabled = true
-            } else if (slot.attendee === attendeeID) {
-              event.email = slot.email || ''
-              event.size = slot.size || 10
+            } else if (slot.school === attendeeID) {
+              event.time = slot.time || ''
+              event.formSize = slot.formSize || 1
+              event.classSize = slot.classSize || 10
+              event.teachers = slot.teachers || []
               event.notes = slot.notes || ''
             }
           }
@@ -103,16 +109,20 @@ export async function handler(req, context) {
       for (const date of event.dates) {
         for (const slot of date.slots) {
           console.log('slot: ', date.date, slot.slot, slot.attendee)
-          if (slot.attendee === slotData.attendee) {
-            slot.attendee = ''
-            slot.email = ''
-            delete slot.size
-            delete slot.notes
+          if (slot.school === slotData.school) {
+            slot.time = ''
+            slot.school = ''
+            slot.formSize = ''
+            slot.classSize = ''
+            slot.teachers = []
+            slot.notes = ''
           }
           if (date.date === slotData.date && slot.slot === slotData.slot) {
-            slot.attendee = slotData.attendee
-            slot.email = slotData.email
-            slot.size = slotData.size
+            slot.time = slotData.time
+            slot.school = slotData.school
+            slot.formSize = slotData.formSize
+            slot.classSize = slotData.classSize
+            slot.teachers = slotData.teachers
             slot.notes = slotData.notes
           }
         }

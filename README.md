@@ -6,3 +6,4 @@ TODO
 - DONE - Tweak styling and colouring
 - DONE - Add instructions and a little more detail
 - DONE - Add loading icon
+- DONE - Lots of changes from feedback
