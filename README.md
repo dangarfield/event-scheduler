@@ -7,3 +7,5 @@ TODO
 - DONE - Add instructions and a little more detail
 - DONE - Add loading icon
 - DONE - Lots of changes from feedback
+- DONE - Admin add new event in accordian
+- DONE - Padding at bottom of all events

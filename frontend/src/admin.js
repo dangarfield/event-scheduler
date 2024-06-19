@@ -74,7 +74,7 @@ const renderEvents = () => {
         return `
         <div class="card text-bg-light mb-3">
             <div class="card-body">
-                <form class="mb-3 data-event" data-event="${event.id}">
+                <form class="data-event" data-event="${event.id}">
                 <div class="row">
                     <div class="col">
                         <div class="form-floating mb-3">
@@ -116,10 +116,10 @@ const renderEvents = () => {
                                     <th scope="col" style="width:8%">Slot</th>
                                     <th scope="col">Time</th>
                                     <th scope="col">School</th>
-                                    <th scope="col" style="width:5%">Form Size</th>
+                                    <th scope="col" style="width:5%">No. of Forms</th>
                                     <th scope="col" style="width:5%">Class Size</th>
                                     <th scope="col">Teacher Name</th>
-                                    <th scope="col">Email</th>
+                                    <th scope="col">Teacher Email</th>
                                     <th scope="col">Notes</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -309,17 +309,17 @@ const renderNew = () => {
     document.querySelector('.content').innerHTML = `
     <div class='row'>
         <div class="col-12">
-            <h1>Attendee Scheduler Admin</h1>
-            <p class="lead">This site allows you to configure an event, send links to your attendees, allowing them to choose a selection, the you can export to Excel</p>
+            <h1>Event Scheduler Admin</h1>
+            <p class="lead">This site allows you to configure an event, send links to your attendees, allowing them to choose a selection, then you can export to Excel</p>
             
             <div class="accordion instructions mb-3">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Instructions (click to expand)
+                        <button class="accordion-button collapsed" type="button">
+                            Instructions
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-collapse collapse">
                         <div class="accordion-body">
                             <p>Configuring:</p>
                             <ul>
@@ -346,67 +346,79 @@ const renderNew = () => {
                     </div>
                 </div>
             </div>
+            <div class="accordion create-new-event mb-3">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button">
+                            Create new event
+                        </button>
+                    </h2>
+                    <div class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <div class="card text-bg-light mb-3">
+                                <div class="card-body">
+                                    <form class="new-event">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="new-event" value="${randomEventName}">
+                                                    <label for="new-event">Event Name</label>
+                                                </div>
 
-            <h2>Create New Event</h2>
-            <div class="card text-bg-light mb-3">
-                <div class="card-body">
-                    <form class="new-event">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="new-event" value="${randomEventName}">
-                                    <label for="new-event">Event Name</label>
+
+                                                <div class="form-floating mb-3">
+                                                    <textarea class="form-control" placeholder="School List" id="new-attendees" style="height:400px">School 1\nSchool 2\nSchool 3</textarea>
+                                                    <label for="new-attendees">School List</label>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-6">
+                                            
+                                                <div class="form-floating mb-3">
+                                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro" style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe Phase Team</textarea>
+                                                    <label for="new-intro">Introduction Text</label>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="new-from" class="col-sm-2 col-form-label">From Date</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="date" class="form-control" id="new-from" style="max-width: 200px" value="${formattedTodayDate}">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label for="new-to" class="col-sm-2 col-form-label">To Date</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="date" class="form-control" id="new-to" style="max-width: 200px" value="${formattedNextWeekDate}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="new-working-week" class="col-sm-2 col-form-label">Available Days</label>
+                                                    <input type="radio" class="btn-check" name="new-working-week" id="true" autocomplete="off" checked>
+                                                    <label class="btn" for="true">Working Work</label>
+                                                    <input type="radio" class="btn-check" name="new-working-week" id="false" autocomplete="off">
+                                                    <label class="btn" for="false">Every Day</label>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="new-slots" class="col-sm-2 col-form-label">Available Slots</label>
+                                                    <input type="radio" class="btn-check" name="new-slots" id="allday" autocomplete="off">
+                                                    <label class="btn" for="allday">All day</label>
+                                                    <input type="radio" class="btn-check" name="new-slots" id="morningafternoon" autocomplete="off" checked>
+                                                    <label class="btn" for="morningafternoon">Morning / Afternoon</label>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">Create event</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-
-
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="School List" id="new-attendees" style="height:400px">School 1\nSchool 2\nSchool 3</textarea>
-                                    <label for="new-attendees">School List</label>
-                                </div>
-
-
-                            </div>
-                            <div class="col-6">
-                            
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control" placeholder="Introduction Text" id="new-intro" style="height:200px">Hello and welcome!\nPlease select a slot for your event.\n\nThe Phase Team</textarea>
-                                    <label for="new-intro">Introduction Text</label>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="new-from" class="col-sm-2 col-form-label">From Date</label>
-                                    <div class="col-sm-10">
-                                        <input type="date" class="form-control" id="new-from" style="max-width: 200px" value="${formattedTodayDate}">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="new-to" class="col-sm-2 col-form-label">To Date</label>
-                                    <div class="col-sm-10">
-                                        <input type="date" class="form-control" id="new-to" style="max-width: 200px" value="${formattedNextWeekDate}">
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="new-working-week" class="col-sm-2 col-form-label">Available Days</label>
-                                    <input type="radio" class="btn-check" name="new-working-week" id="true" autocomplete="off" checked>
-                                    <label class="btn" for="true">Working Work</label>
-                                    <input type="radio" class="btn-check" name="new-working-week" id="false" autocomplete="off">
-                                    <label class="btn" for="false">Every Day</label>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="new-slots" class="col-sm-2 col-form-label">Available Slots</label>
-                                    <input type="radio" class="btn-check" name="new-slots" id="allday" autocomplete="off">
-                                    <label class="btn" for="allday">All day</label>
-                                    <input type="radio" class="btn-check" name="new-slots" id="morningafternoon" autocomplete="off" checked>
-                                    <label class="btn" for="morningafternoon">Morning / Afternoon</label>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Create event</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+            
         </div>
         <div class="col-12 new-holder">
         <div>
@@ -465,10 +477,11 @@ const bindNew = () => {
         renderEvents()
     })
 
-    document.querySelector('.instructions .accordion-button').addEventListener('click', () => {
-        console.log('asdsad')
-        document.querySelector('.instructions .accordion-button').classList.toggle('collapsed')
-        document.querySelector('.instructions .accordion-collapse').classList.toggle('collapse')
+    document.querySelectorAll('.accordion').forEach(accordion => {
+        accordion.addEventListener('click', () => {
+            accordion.querySelector('.accordion-button').classList.toggle('collapsed')
+            accordion.querySelector('.accordion-collapse').classList.toggle('collapse')
+        })
     })
 }
 const saveEvent = async (event) => {

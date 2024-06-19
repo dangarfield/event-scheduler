@@ -12,7 +12,7 @@ const getConnection = async () => {
 const getEventsCollection = async () => {
   const connection = await getConnection()
   const database = connection.db('events')
-  const collection = database.collection('events')
+  const collection = database.collection(process.env.EVENTS_COLLECTION || 'events')
   return collection
 }
 
