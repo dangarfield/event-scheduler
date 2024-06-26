@@ -497,8 +497,8 @@ const bindNew = () => {
         }
         console.log('event', event)
         allEvents.push(event)
-        // await saveEvent(event)
-        // renderEvents()
+        await saveEvent(event)
+        renderEvents()
     })
 
     document.querySelectorAll('.accordion').forEach(accordion => {
