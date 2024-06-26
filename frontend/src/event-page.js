@@ -181,7 +181,7 @@ const renderEvents = (events) => {
     <div class="row">
         <div class="navbar bg-body-tertiary border-bottom border-body navbar-expand-lg mb-3">
             <div class="container-fluid col-md-6 offset-md-3">
-                <div class="collapseX navbar-collapseX col-md-6 offset-md">
+                <div class="collapseX navbar-collapseX">
                     <ul class="navbar-navX nav nav-pills">
                         ${eventTabHTML.join('')}
                     </ul>
