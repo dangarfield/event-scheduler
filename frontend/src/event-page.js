@@ -269,6 +269,10 @@ const bindEvents = (events) => {
                 duration: 3000,              
             }).showToast()  
 
+            const eventLinkEle = document.querySelector(`.event-link[data-event="${event.id}"]`)
+            eventLinkEle.classList.remove('event-incomplete')
+            eventLinkEle.classList.add('event-complete')
+            eventLinkEle.innerHTML = event.name
             const formSize = parseInt(eventEle.querySelector('#form-size').value)
             const teachers = [{name: eventEle.querySelector('#name1').value, email: eventEle.querySelector('#email1').value}]
             if (formSize > 1) teachers.push({name: eventEle.querySelector('#name2').value, email: eventEle.querySelector('#email2').value})
@@ -319,15 +323,11 @@ const bindEvents = (events) => {
                     linkEle.classList.remove('active')
                 }
             })
-            // eventEle.querySelectorAll('.time').forEach((timeEle) => {
-            //     timeEle.style.display = 'none'
-            // })
-            // e.target.parentNode.querySelector('.time').style.display = 'block'
         })
     })
     const eventIncompleteLink = document.querySelector('.event-incomplete')
     console.log('eventIncompleteLink', eventIncompleteLink)
-    if(eventIncompleteLink) eventIncompleteLink.click()
+    if (eventIncompleteLink) eventIncompleteLink.click()
 }
 export const initEvent = async (attendeeID) => {
     console.log('initEvent', attendeeID)
