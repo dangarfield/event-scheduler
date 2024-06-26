@@ -1,0 +1,18 @@
+
+.nav-pills .nav-link {
+    /* color: black;
+    background-color: #6ea8fe; */
+}
+.nav-pills .nav-link.event-complete {
+    /* color: var(--bs-nav-pills-link-active-color); */
+    /* background-color: #479f76; */
+}
+
+.nav-pills .nav-link.active {
+    /* color: var(--bs-nav-pills-link-active-color); */
+    /* background-color: var(--bs-primary); */
+}
+.nav-pills .nav-link.event-complete.active {
+    /* color: var(--bs-nav-pills-link-active-color); */
+    /* background-color: var(--bs-success); */
+}

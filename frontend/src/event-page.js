@@ -59,8 +59,19 @@ const renderEvents = (events) => {
     const eventHTML = []
     const eventTabHTML = []
     for (const [eventIndex, event] of events.entries()) {
-        eventTabHTML.push(`<li class="nav-item">
-            <button class="nav-link event-link${eventIndex===0?' active':''}" data-event="${event.id}">${event.name}</button>
+        
+        let eventComplete = false
+        for (const date of event.dates) {
+            for (const slot of date.slots) {
+                if (slot.school === event.school) eventComplete = true
+            }
+        }
+        console.log('eventComplete', eventComplete)
+        
+        eventTabHTML.push(`<li class="nav-item me-2">
+            <button class="nav-link event-link${eventIndex===0?' active':''} ${eventComplete?'event-complete':'event-incomplete'}" data-event="${event.id}">
+                <i class="bi ${eventComplete?'':'bi-exclamation-triangle'} me-1"></i> ${event.name}
+            </button>
         </li>`)
         document.title = event.name // TODO - Ensure title for multiple / single event is correct
         let email1 = ''
@@ -286,8 +297,8 @@ const bindEvents = (events) => {
     }
     document.querySelectorAll('.event-link').forEach(link => {
         link.addEventListener('click', (e) => {
-            const eventID = e.target.getAttribute('data-event')
-            console.log('e', e.target.getAttribute('data-event'))
+            const eventID = e.currentTarget.getAttribute('data-event')
+            console.log('e', e.currentTarget.getAttribute('data-event'))
             document.querySelectorAll('.event[data-event]').forEach(eventEle => {
                 console.log('eventEle', eventEle)
                 if (eventID === eventEle.getAttribute('data-event')) {
@@ -314,6 +325,9 @@ const bindEvents = (events) => {
             // e.target.parentNode.querySelector('.time').style.display = 'block'
         })
     })
+    const eventIncompleteLink = document.querySelector('.event-incomplete')
+    console.log('eventIncompleteLink', eventIncompleteLink)
+    if(eventIncompleteLink) eventIncompleteLink.click()
 }
 export const initEvent = async (attendeeID) => {
     console.log('initEvent', attendeeID)
