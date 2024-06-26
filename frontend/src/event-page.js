@@ -69,7 +69,7 @@ const renderEvents = (events) => {
         console.log('eventComplete', eventComplete)
         
         eventTabHTML.push(`<li class="nav-item me-2">
-            <button class="nav-link event-link${eventIndex===0?' active':''} ${eventComplete?'event-complete':'event-incomplete'}" data-event="${event.id}">
+            <button class="nav-link event-link mb-2${eventIndex===0?' active':''} ${eventComplete?'event-complete':'event-incomplete'}" data-event="${event.id}">
                 <i class="bi ${eventComplete?'':'bi-exclamation-triangle'} me-1"></i> ${event.name}
             </button>
         </li>`)
@@ -179,8 +179,9 @@ const renderEvents = (events) => {
     console.log('eventHTML', eventHTML)
     document.querySelector('.content').innerHTML = `
     <div class="row">
-        <div class="navbar bg-body-tertiary border-bottom border-body navbar-expand-lg mb-3">
+        <div class="navbar bg-dark bg-body-primary border-bottom border-body navbar-expand-lg mb-3 pb-0">
             <div class="container-fluid col-md-6 offset-md-3">
+                <span class="navbar-brand mb-0 lead text-white">Select event:</span>
                 <div class="collapseX navbar-collapseX">
                     <ul class="navbar-navX nav nav-pills">
                         ${eventTabHTML.join('')}
@@ -189,7 +190,7 @@ const renderEvents = (events) => {
             </div>
         </div>
     </div>
-    ${eventHTML.join('')}`// TODO - Add divider
+    ${eventHTML.join('')}`
 }
 const showHideContactDetails = (eventEle) => {
     const formSize = parseInt(eventEle.querySelector('#form-size').value)
@@ -229,7 +230,7 @@ const showHideContactDetails = (eventEle) => {
             break;
     }
 }
-const bindEvents = (events) => {
+const bindEvents = (events, defaultEventID) => {
     for (const event of events) {
         const eventEle = document.querySelector(`.event[data-event="${event.id}"]`)
         renderDateSlots(eventEle, event)
@@ -264,10 +265,7 @@ const bindEvents = (events) => {
                 }).showToast()
                 return
             }
-            Toastify({
-                text: "Date saved! Thanks!",
-                duration: 3000,              
-            }).showToast()  
+            
 
             const eventLinkEle = document.querySelector(`.event-link[data-event="${event.id}"]`)
             eventLinkEle.classList.remove('event-incomplete')
@@ -297,6 +295,30 @@ const bindEvents = (events) => {
             if (response.status !== 200) return
             const saveRes = await response.json()
             console.log('SAVE saveRes',saveRes)
+
+            const confirmToast = Toastify({
+                text: `<span class="">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Confirmed for ${new Date(update.date).toDateString()} - ${update.slot} - ${update.time}
+                    <sup><i class="bi bi-x"></i></sup>
+                    </span>`,
+                duration: -1,
+                position: 'center',
+                gravity: 'bottom',
+                style: {
+                    background: "linear-gradient(to right, #0d6efd, #0dcaf0)",
+                    'font-size': '30px'
+                },
+                offset: {
+                    y: 150
+                },
+                escapeMarkup: false,
+                onClick: function(ele) {
+                    // console.log('onClick', ele, this, confirmToast)
+                    confirmToast.hideToast()
+                },             
+            })
+            confirmToast.showToast()
         })
     }
     document.querySelectorAll('.event-link').forEach(link => {
@@ -325,11 +347,11 @@ const bindEvents = (events) => {
             })
         })
     })
-    const eventIncompleteLink = document.querySelector('.event-incomplete')
-    console.log('eventIncompleteLink', eventIncompleteLink)
-    if (eventIncompleteLink) eventIncompleteLink.click()
+    const defaultEventLink = document.querySelector(`.event-link[data-event="${defaultEventID}"]`)
+    console.log('defaultEventLink', defaultEventLink)
+    if (defaultEventLink) defaultEventLink.click()
 }
-export const initEvent = async (attendeeID) => {
+export const initEvent = async (defaultEventID, attendeeID) => {
     console.log('initEvent', attendeeID)
     const events = await getEvents(attendeeID)
     if (events === undefined) {
@@ -337,5 +359,5 @@ export const initEvent = async (attendeeID) => {
         return
     }
     renderEvents(events)
-    bindEvents(events)
+    bindEvents(events, defaultEventID)
 }

@@ -11,12 +11,12 @@ const initRouting = async () => {
     } else {
         const pathSplit = eventPath.split('/')
         console.log('pathSplit', pathSplit)
-        if(pathSplit.length !== 2) {
+        if(pathSplit.length !== 3) {
             document.querySelector('.content').innerHTML = 'Please select a valid event'
             return
         }
         // Get school data
-        initEvent(pathSplit[1])
+        initEvent(pathSplit[1],pathSplit[2])
         // if event data is empty
         // document.querySelector('.content').innerHTML = 'Please select a valid event'
 
