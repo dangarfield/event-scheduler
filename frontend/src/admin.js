@@ -78,7 +78,7 @@ const renderAttendeeLinks = (eventID, eventEle) => {
         const complete = attendeesComplete.includes(a.name)
         return `<p class="mb-0">
             ${complete?'<i class="bi bi-patch-check-fill text-success me-1"></i>':'<i class="bi bi-patch-check-fill text-success me-1 opacity-0"></i>'}
-            <a href="/${eventID}/${a.link}" target="_blank">${a.name}</a>
+            <a href="/${a.link}" target="_blank">${a.name}</a>
         </p>`
     }).join('')
 }

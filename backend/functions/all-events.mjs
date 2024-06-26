@@ -46,7 +46,7 @@ export async function handler(req, context) {
       console.log('get all events')
       const eventsCollection = await getEventsCollection()
       let allEvents = await eventsCollection.find().toArray()
-      allEvents.sort((a, b) => new Date(a.dates[0].date) - new Date(b.dates[0].date));
+      allEvents.sort((a, b) => new Date(a.dates[0].date) - new Date(b.dates[0].date))
       
       console.log('allEvents', allEvents)
       allEvents.forEach(event => {
