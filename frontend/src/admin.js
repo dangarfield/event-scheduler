@@ -476,6 +476,15 @@ const bindNew = () => {
         const name = document.querySelector('.new-event #new-event').value
         const fromDate = new Date(document.querySelector('.new-event #new-from').value)
         const toDate = new Date(document.querySelector('.new-event #new-to').value)
+        console.log('date range', fromDate, toDate, fromDate<toDate)
+        if(fromDate >= toDate) {
+            Toastify({
+                text: "Please enter valid dates",
+                duration: 3000
+            }).showToast()
+            return
+        }
+        
         const isWorkingWeek = document.querySelector('.new-event input[name="new-working-week"]:checked').getAttribute('id') === 'true'
         const dates = generateDateList(fromDate, toDate, isWorkingWeek)
         const dateSlots = addSlots(dates, document.querySelector('.new-event input[name="new-slots"]:checked').getAttribute('id'))
@@ -488,8 +497,8 @@ const bindNew = () => {
         }
         console.log('event', event)
         allEvents.push(event)
-        await saveEvent(event)
-        renderEvents()
+        // await saveEvent(event)
+        // renderEvents()
     })
 
     document.querySelectorAll('.accordion').forEach(accordion => {

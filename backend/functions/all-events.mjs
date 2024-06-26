@@ -46,6 +46,8 @@ export async function handler(req, context) {
       console.log('get all events')
       const eventsCollection = await getEventsCollection()
       let allEvents = await eventsCollection.find().toArray()
+      allEvents.sort((a, b) => new Date(a.dates[0].date) - new Date(b.dates[0].date));
+      
       console.log('allEvents', allEvents)
       allEvents.forEach(event => {
         event.id = event._id
@@ -54,7 +56,7 @@ export async function handler(req, context) {
       return {
             statusCode: 200,
             body: JSON.stringify(allEvents)
-        }
+      }
     } else if (req.httpMethod === 'POST') {
       const eventsCollection = await getEventsCollection()
       const event = JSON.parse(req.body)
