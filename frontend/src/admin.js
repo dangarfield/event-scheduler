@@ -84,9 +84,12 @@ const renderAttendeeLinks = (eventID, eventEle) => {
 }
 const renderEvents = () => {
     console.log('renderEvents', allEvents, document.querySelector('.existing-holder'))
+    document.querySelector('.event-admin-links').innerHTML = 'Go to: ' + allEvents.map(event => {
+        return `<a href="#${event.id}" onclick="event.preventDefault();document.querySelector(\'#${event.id}\').scrollIntoView();">${event.name}</a> `
+    }).join('')
     document.querySelector('.existing-holder').innerHTML = allEvents.map(event => {
         return `
-        <div class="card text-bg-light mb-3">
+        <div class="card text-bg-light mb-3" id="${event.id}">
             <div class="card-body">
                 <form class="data-event" data-event="${event.id}">
                 <div class="row">
@@ -438,7 +441,7 @@ const renderNew = () => {
         <div class="col-12 new-holder">
         <div>
         <div class="col-12">
-            <h2>All Events<h2>
+            <h2>All Events <span class="event-admin-links h6"></span><h2>
         </div>
         <div class="col-12 existing-holder">
         </div>

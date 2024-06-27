@@ -13,7 +13,7 @@ const getEvents = async (attendeeID) => {
 const renderDateSlots = (eventEle, event) => {
     eventEle.querySelector('.date-slots').innerHTML = `${event.dates.map((date,dateIndex) => {
         const dateDate = new Date(date.date)
-        return `<div class="card text-bg-light mb-3">
+        return `<div class="card text-bg-light">
             <div class="card-body row">
                 <div class="col">
                     <p class="mb-0">${dateDate.toDateString()}</p>
