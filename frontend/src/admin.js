@@ -344,7 +344,7 @@ const renderNew = () => {
                                 <li>School list - Add as many as you want here, schools will not see each other's names, slots or email addresses etc</li>
                                 <li>Introduction text - This is show on the attendee page</li>
                                 <li>From / to date - This is just a date range of the event. You can disable certain days and slots after it is created</li>
-                                <li>Available days / slots - Working work / every. Full day / Morning afternoon. You can rename the slots after created, eg, 9-11am etc</li>
+                                <li>Available days / slots - Working week / every. Full day / Morning afternoon. You can rename the slots after created, eg, 9-11am etc</li>
                                 <li>Once the event has been created, you can view the results, links and edit information on this page below</li>
                             </ul>
                             <p>Running</p>
@@ -413,7 +413,7 @@ const renderNew = () => {
                                                 <div class="mb-3">
                                                     <label for="new-working-week" class="col-sm-2 col-form-label">Available Days</label>
                                                     <input type="radio" class="btn-check" name="new-working-week" id="true" autocomplete="off" checked>
-                                                    <label class="btn" for="true">Working Work</label>
+                                                    <label class="btn" for="true">Working Week</label>
                                                     <input type="radio" class="btn-check" name="new-working-week" id="false" autocomplete="off">
                                                     <label class="btn" for="false">Every Day</label>
                                                 </div>
