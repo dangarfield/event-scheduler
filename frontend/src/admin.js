@@ -44,6 +44,7 @@ const getEventDataFromTable = (eventEle) => {
     const event = {
         id: eventEle.querySelector('#event').value,
         name: eventEle.querySelector('#name').value,
+        closing: eventEle.querySelector('#closing').value,
         intro: eventEle.querySelector('#intro').value,
         attendees: eventEle.querySelector('#attendees').value.split('\n'),
         dates
@@ -98,11 +99,15 @@ const renderEvents = () => {
                             <input type="text" class="form-control" id="event" value="${event.id}">
                             <label for="event">Event ID</label>
                         </div>
-                    </div>
-                    <div class="col">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="name" value="${event.name}">
                             <label for="name">Event Name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="closing" value="${event.closing}">
+                            <label for="closing">Closing Date</label>
                         </div>
                     </div>
                     <div class="col">

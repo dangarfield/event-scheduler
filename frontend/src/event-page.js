@@ -1,5 +1,6 @@
 import Toastify from 'toastify-js'
 
+let isClosed = false
 const getEvents = async (attendeeID) => {
     const response = await fetch(`/api/attendees/${attendeeID}`, {
         method: 'GET',
@@ -48,14 +49,14 @@ const renderDateSlots = (eventEle, event) => {
 
                     return `<div class="col">
                             <input type="radio" class="btn-check" name="slot" data-date="${date.date}" data-slot="${slot.slot}"
-                                id="${date.date}-${slot.slot}" autocomplete="off" ${notAvailable?'disabled':''} ${slot.school === event.school ?'checked':''}>
+                                id="${date.date}-${slot.slot}" autocomplete="off" ${notAvailable||isClosed?'disabled':''} ${slot.school === event.school ?'checked':''}>
                             <label class="btn ${notAvailable?'btn-outline-secondary':'btn-outline-primary'}  w-100" for="${date.date}-${slot.slot}">${slot.slot}</label>
                             
                             <!--<input type="time" class="form-control mt-1 time"
                                 min="${timeMin}" max="${timeMax}" step="600" 
                                 ${slot.school === event.school ?'':'style="display:none;"'}
                                 value="${time}" />-->
-                            <select class="form-select time" ${slot.school === event.school ?'':'style="display:none;"'}>
+                            <select class="form-select time" ${slot.school === event.school ?'':'style="display:none;"'}${isClosed?' disabled':''}>
                                 ${times.map((t) => {return `<option value="${t}"${t===time?' selected':''}>${t}</option>`}).join('')}
                             </select>
 
@@ -112,13 +113,30 @@ const renderEvents = (events) => {
             email3 = event.teachers[2].email
             name3 = event.teachers[2].name
         }
+        let closingHTML = ''
+        
+        if (event.closing && event.closing !== '') {
+            const closingDate = new Date(event.closing)
+            closingDate.setHours(23)
+            closingDate.setMinutes(59)
+            console.log('closing dates', closingDate, new Date(),  new Date() - closingDate)
+            if (closingDate <= new Date()) {
+                isClosed = true
+                closingHTML = `<div class="alert alert-danger" role="alert">
+                        Selection time for this event is now closed. Contact the phase team directly for changes
+                    </div>`
+            } else {
+                closingHTML = `<div class="alert alert-primary" role="alert">
+                        Selection time for this event closes on ${closingDate.toDateString()}
+                    </div>`
+            }
+        }
         eventHTML.push(`
         <div class="event" data-event="${event.id}"${eventIndex===0?'':' style="display:none;"'}>
             <div class="row">
                 <div class="col-md-6 offset-md-3">
                     <h1>${event.name}</h1>
                     ${event.intro.split('\n').map(text => `<p>${text}</p>`).join('')}
-
                     <form class="event mb-3">
                         <div class="card text-bg-light mb-3">
                             <div class="card-body row gx-3">
@@ -188,6 +206,7 @@ const renderEvents = (events) => {
                                 </div>
                             </div>
                         </div>
+                        ${closingHTML}
                         <div class="date-slots">
                         </div>
                     </form>
