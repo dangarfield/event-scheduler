@@ -179,7 +179,7 @@ const renderEvents = (events) => {
                                         <div class="col-7">
                                             <div class="form-floating mb-3">
                                                 <input type="number" class="form-control" id="class-size" value="${event.classSize}" required>
-                                                <label for="size">Total Year 6 Students</label>
+                                                <label for="size">Total No. of Students</label>
                                             </div>
                                         </div>
                                     </div>
