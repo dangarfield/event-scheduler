@@ -105,8 +105,6 @@ const renderEvents = () => {
                             <input type="text" class="form-control" id="name" value="${event.name}">
                             <label for="name">Event Name</label>
                         </div>
-                    </div>
-                    <div class="col">   
                         <div class="form-floating mb-3">
                             <input type="date" class="form-control" id="closing" value="${event.closing}">
                             <label for="closing">Closing Date</label>
@@ -114,13 +112,13 @@ const renderEvents = () => {
                     </div>
                     <div class="col">
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" placeholder="Introduction Text" id="intro" style="height:200px">${event.intro}</textarea>
+                            <textarea class="form-control" placeholder="Introduction Text" id="intro" style="height:206px">${event.intro}</textarea>
                             <label for="intro">Introduction Text</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" placeholder="School List" id="attendees" style="height:200px">${event.attendees.join('\n')}</textarea>
+                            <textarea class="form-control" placeholder="School List" id="attendees" style="height:206px">${event.attendees.join('\n')}</textarea>
                             <label for="attendees">School List</label>
                         </div>
                     </div>
