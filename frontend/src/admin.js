@@ -75,6 +75,7 @@ const renderAttendeeLinks = (eventID, eventEle) => {
         }
     }
     console.log('attendees', attendees, attendeesComplete, event)
+
     eventEle.querySelector('.attendee-links').innerHTML = attendees.map(a => {
         const complete = attendeesComplete.includes(a.name)
         return `<p class="mb-0">
@@ -82,6 +83,7 @@ const renderAttendeeLinks = (eventID, eventEle) => {
             <a href="/${event.id}/${a.link}" target="_blank">${a.name}</a>
         </p>`
     }).join('')
+    eventEle.querySelector('.attendee-count-summary').innerHTML = `(${attendeesComplete.length} of ${attendees.length} complete)`
 }
 const renderEvents = () => {
     console.log('renderEvents', allEvents, document.querySelector('.existing-holder'))
@@ -104,7 +106,7 @@ const renderEvents = () => {
                             <label for="name">Event Name</label>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col">   
                         <div class="form-floating mb-3">
                             <input type="date" class="form-control" id="closing" value="${event.closing}">
                             <label for="closing">Closing Date</label>
@@ -124,7 +126,7 @@ const renderEvents = () => {
                     </div>
                     <div class="col">
                         <div class="form-floating mb-3">
-                            <h5>Attendee Links</h5>
+                            <h5>Attendee Links <span class="attendee-count-summary h6 text-secondary"></span></h5>
                             <div class="attendee-links"></div>
                         </div>
                     </div>
